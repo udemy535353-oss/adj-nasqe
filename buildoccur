@@ -1,0 +1,169 @@
+from PyQt5.QtWidgets import QMainWindow,QLabel, QApplication, QVBoxLayout, QHBoxLayout, QPushButton, QLineEdit, QGridLayout
+from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtCore import Qt
+import string
+import random
+import sys
+import sqlite3
+class occur(QtWidgets.QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setFixedSize(300,400)
+        self.baglantı()
+        self.init_ui()
+    def baglantı(self):
+        self.con = sqlite3.connect("phone.db")
+        self.cursor = self.con.cursor()
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS lib(numara TEXT)")
+        self.con.commit()
+    def create(self,uzunluk = 11):
+        karakterler = string.digits
+        kod = "".join(random.choice(karakterler) for b in range(uzunluk))
+        return kod
+    def init_ui(self):
+        self.launch = QPushButton("find")
+        self.launch.setObjectName("findButton")
+        self.sorgu = QLineEdit()
+        self.sorgu.setFixedSize(180, 35)
+        self.sorgu.setObjectName("queryInput")
+        self.sorgu.setStyleSheet("background-color: #544d4d;")
+        self.message = QLabel("Merhaba")
+        self.message.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.message.setWordWrap(True)
+        self.message.setObjectName("messageLabel")
+        self.buton = QPushButton("Generate")
+        self.buton.setObjectName("generateButton")
+        self.view = QPushButton("View")
+        self.view.setObjectName("viewButton")
+        self.h = QHBoxLayout()
+        self.h.addWidget(self.sorgu)
+        self.h.addStretch(1)
+        self.v = QVBoxLayout()
+        self.v.addLayout(self.h)
+        self.v.addWidget(self.message)
+        self.grid = QGridLayout()
+        self.grid.addWidget(self.launch,0,1)
+        self.grid.addWidget(self.view,0,2)
+        self.grid.addWidget(self.buton,0,3)
+        self.v.addLayout(self.grid)
+        self.setLayout(self.v)
+        self.setWindowTitle("Occur")
+        self.launch.clicked.connect(self.kont)
+        self.buton.clicked.connect(self.upp)
+        self.view.clicked.connect(self.urr)
+    def upp(self):
+        hak = 0
+        while(hak<100):
+            num = self.create()
+            self.cursor.execute("select numara from lib where numara = ?",(num,))
+            data = self.cursor.fetchall()
+            if len(data) == 0 and num.startswith("05"):
+                self.cursor.execute("insert into lib Values(?)",(num,))
+                self.con.commit()
+                self.message.setText("generated phone number: {}".format(num,))
+                return
+            else:
+                hak += 1
+    def kont(self):
+        numa = self.sorgu.text()
+        self.cursor.execute("select numara from lib where numara = ?", (numa,))
+        data = self.cursor.fetchall()
+        if len(data) > 0:
+            self.message.setText("Phone number found : {}".format(numa,))
+        else:
+            self.message.setText("Phone number not found")
+    def urr(self):
+            tyy = list()
+            iha = self.sorgu.text()
+            self.cursor.execute("select numara from lib")
+            hop = self.cursor.fetchall()
+            for b in hop:
+                stnum = b[0]
+                if stnum.startswith(iha):
+                    tyy.append(stnum)
+            if len(tyy) > 0:
+                self.message.setText("found numbers\n" + "\n".join(tyy))
+            else:
+                self.message.setText("No numbers found ")
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    app.setStyleSheet("""
+        QWidget {
+            background-color: #82b7c4;
+            font-family: "Inter";
+            }
+        QPushButton {
+            background-color: #00ccff;
+            color: #ffffff;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 16px;
+            font-weight: bold;
+            border: 2px solid #0078d4;
+            }
+        QPushButton:hover {
+            background-color: #1c8aa6;
+            }
+        QPushButton:pressed {
+            background-color: #1f7287;
+           }
+        #findButton {
+                background-color: #b5cf13;
+            }
+        #findButton:hover {
+            background-color: #97ab18;
+            }
+        #findButton:pressed {
+            background-color: #849130;
+            }
+        #generateButton {
+            background-color: #eb1ce0;
+            }
+        #generateButton:hover {
+            background-color: #b025a9;
+            }
+        #generateButton:pressed {
+            background-color: #661062;
+            }
+        #viewButton {
+            background-color: #0f0bde;
+            }
+        #viewButton:hover {
+            background-color: #211e69;
+            }
+        #viewButton:pressed {
+            background-color: #1a1866;
+            }
+        QLineEdit {
+            background-color: #1a9ca1;
+            color: #ffffff;
+            font-size: 16px;
+            padding: 8px;
+            border: 2px solid #0078d4;
+            border-radius: 5px;
+                }
+        QLabel {
+            background-color: #362b30;
+            color: #ffffff;
+            font-size: 16px;
+            padding: 8px 10px;
+            border: 2px solid #0078d4;
+            border-radius: 5px;
+            min-height: 50px;
+            font-weight: bold;
+            text-align: center;
+            font-family: "Inter";}
+                      
+                      
+                      
+                      
+            
+
+                      
+                      """)
+    
+            
+                
+    window = occur()
+    window.show()
+    sys.exit(app.exec_())
