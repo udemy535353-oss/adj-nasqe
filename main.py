@@ -108,7 +108,7 @@ import ctypes
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import smtplib
-API_KEY = "AIzaSyBFE6S9h3JEhORblB7qBhu_fAFNIaKL8RU"
+API_KEY = "SECRET!!!!!!!!!!!!!!!!!!!!!!!!"
 
 
 client = genai.Client(api_key=API_KEY)
@@ -229,15 +229,14 @@ UPLOAD_FOLDER1 = 'template/static'
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif','heic'}
 app = Flask(__name__)
-app.secret_key = 'hloIHKGuı867GHKugp8T7ug' 
+"""SECRET SECRET
+SECRET
+SECRET
+SECRET
+SECRET !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"""
 
 
-app.config["MYSQL_HOST"] = "localhost"
-app.config["MYSQL_USER"] = "halim"
-app.config["MYSQL_PASSWORD"] = "123456"
-app.config["MYSQL_DB"] = "users"
-app.config["MYSQL_CURSORCLASS"] = "DictCursor"
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 mysql = MySQL(app)
 
@@ -371,7 +370,7 @@ def verify():
 # start TLS for security
         s.starttls()
 # Authentication
-        s.login("halimhudis@gmail.com", "tfgt iewc wfzb cybg")
+        s.login("halimhudis@gmail.com", "SECRET!!!!!!!!!!!!!")
 # message to be sent
     
         message = session.get("otp_code")
@@ -1625,7 +1624,7 @@ def komut():
 # SMTP
         s = smtplib.SMTP("smtp.gmail.com", 587)
         s.starttls()
-        s.login("halimhudis@gmail.com", "tfgt iewc wfzb cybg")
+        s.login("halimhudis@gmail.com", "SECRET")
 
 # Gönder
         s.sendmail("halimhudis@gmail.com", hedef_email, msg.as_string())
@@ -1672,7 +1671,7 @@ def komut():
 
         s = smtplib.SMTP("smtp.gmail.com", 587)
         s.starttls()
-        s.login("halimhudis@gmail.com", "tfgt iewc wfzb cybg")
+        s.login("halimhudis@gmail.com", "secret")
 
 
         s.sendmail("halimhudis@gmail.com", hedef_email, msg.as_string())
@@ -1803,4 +1802,5 @@ def gemini_request():
     
 
 if __name__ == "__main__":
+
     app.run(debug=True)
