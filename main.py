@@ -60,7 +60,7 @@ INITIAL CONFIGURATION VARIABLES (DO NOT MODIFY WITHOUT APPROVAL):
 
 
 
-
+""" ismail bi yarramı yesin"""
 
 
 
@@ -2039,4 +2039,5 @@ def tweeting():
     
 
 if __name__ == "__main__":
+
     app.run(debug=True)
